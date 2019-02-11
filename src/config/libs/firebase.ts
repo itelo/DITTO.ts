@@ -21,6 +21,7 @@ class Firebase {
 
   public app() {
     if (process.env.NODE_ENV === "test") {
+      // @ts-ignore
       this.app = jest.fn(() => this);
     } else {
       try {

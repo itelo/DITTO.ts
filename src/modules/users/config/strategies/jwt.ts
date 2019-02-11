@@ -86,7 +86,7 @@ export default function() {
  * @returns an object that contains a JWT and SafeUser
  */
 export function configureUserAndToken(
-  user: UserModel
+  user: UserModel | UserAdminModel
   // | UserStoreAdminModel
 ) {
   // remove the sensitive data before send to client
@@ -118,7 +118,7 @@ export function configureUserAndToken(
  * @returns {SafeUser}
  */
 export function sanitizeUser(
-  user: UserModel
+  user: UserModel | UserAdminModel
   // | UserStoreAdminModel
 ) {
   try {
