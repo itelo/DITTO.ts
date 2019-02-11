@@ -1,3 +1,6 @@
+import { Express } from "express";
+import multer from "multer";
+
 export function imageFileFilter(
   req: Express.Request,
   file: Express.Multer.File,
