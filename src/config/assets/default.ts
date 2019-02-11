@@ -14,7 +14,7 @@ const serverAssets = {
     "dist/modules/*/**/*.js",
     "dist/utils/**/*.js"
   ],
-  models: "src/models/**/*.ts",
+  models: "src/models/*.ts",
   routes: [
     "src/modules/!(core)/routes/**/*.ts",
     "src/modules/core/routes/**/*.ts"

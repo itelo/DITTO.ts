@@ -99,10 +99,11 @@ export function isAllowed(
   // if addressId is passed, it has to check if it belongs to user
   if (addressId) {
     if (
-      user &&
-      user.addresses.find(({ _id }) =>
-        _id ? _id.toString() === addressId : false
-      )
+      user
+      //  &&
+      // user.addresses.find(({ _id }) =>
+      //   _id ? _id.toString() === addressId : false
+      // )
     ) {
       return next();
     }

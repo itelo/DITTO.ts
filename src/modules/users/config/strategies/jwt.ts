@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ErrorHandler } from "types/utils/errorHandler";
 import { UserModel } from "src/models/user.model";
 import { UserAdminModel } from "src/models/admin.model";
-import { UserStoreAdminModel } from "@models/store.admin.model";
+// import { UserStoreAdminModel } from "@models/store.admin.model";
 import { model } from "mongoose";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import * as jwt from "jsonwebtoken";
@@ -11,7 +11,7 @@ import configStack from "@config/index";
 
 const User = model("User");
 const Admin = model("Admin");
-const StoreAdmin = model("UserStoreAdmin");
+// const StoreAdmin = model(tytypety"UserStoreAdmin");
 
 // Setup work and export for the JWT passport strategy
 export default function() {
@@ -59,18 +59,18 @@ export default function() {
               .catch((err: Error) => {
                 return done(err, false);
               });
-          case "store-admin":
-            return StoreAdmin.findOne({ _id: jwt_payload._id })
-              .then((userStoreAdmin: UserStoreAdminModel) => {
-                if (userStoreAdmin) {
-                  return done(undefined, userStoreAdmin.toJSON());
-                } else {
-                  return done(undefined, false);
-                }
-              })
-              .catch((err: Error) => {
-                return done(err, false);
-              });
+          // case "store-admin":
+          //   return StoreAdmin.findOne({ _id: jwt_payload._id })
+          //     .then((userStoreAdmin: UserStoreAdminModel) => {
+          //       if (userStoreAdmin) {
+          //         return done(undefined, userStoreAdmin.toJSON());
+          //       } else {
+          //         return done(undefined, false);
+          //       }
+          //     })
+          //     .catch((err: Error) => {
+          //       return done(err, false);
+          //     });
         }
       }
       // jwt_payload.roles.includes("storeAdmin");
@@ -85,7 +85,10 @@ export default function() {
  * @param {UserModel} user
  * @returns an object that contains a JWT and SafeUser
  */
-export function configureUserAndToken(user: UserModel | UserStoreAdminModel) {
+export function configureUserAndToken(
+  user: UserModel
+  // | UserStoreAdminModel
+) {
   // remove the sensitive data before send to client
   const safeUser = sanitizeUser(user);
   // select only the essential data to save on jwt
@@ -114,7 +117,10 @@ export function configureUserAndToken(user: UserModel | UserStoreAdminModel) {
  * @param {UserModel} user
  * @returns {SafeUser}
  */
-export function sanitizeUser(user: UserModel | UserStoreAdminModel) {
+export function sanitizeUser(
+  user: UserModel
+  // | UserStoreAdminModel
+) {
   try {
     // Remove sensitive data before login
     const { password, salt, ...safeUser } = user.toJSON();
