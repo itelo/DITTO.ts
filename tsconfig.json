@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es2016",
+    // "lib": ["esnext.asynciterable", "es2016"],
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "types/*": ["./src/types/*"],
+      "@models/*": ["./src/models/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@config/*": ["./src/config/*"],
+      "@utils/*": ["./src/utils/*"]
+    },
+    "declaration": true,
+    "types": ["@types/jest"]
+  },
+  "include": ["src/**/*", "test/**/*"]
+}

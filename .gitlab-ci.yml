@@ -1,0 +1,24 @@
+image: node:8.12.0
+
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+    - node_modules/
+
+variables:
+  NODE_ENV: "test"
+  FORCE_COLOR: "1"
+
+test:
+  script:
+    - npm install
+    - npm install -g yarn
+    - yarn jest --forceExit --detectOpenHandles
+
+# pages:
+#   script:
+#     - npm install
+#     - npm run docs
+#   artifacts:
+#     paths:
+#       - public

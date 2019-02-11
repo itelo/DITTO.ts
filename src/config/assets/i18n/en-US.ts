@@ -1,0 +1,67 @@
+export default {
+  // requiredField: "required field",
+  // requiredField_plural: "required fields",
+  // WRONG_PASSWORD: "Password should have at least 6 caracteres",
+  // alreadyExists: "already exists",
+  // beVerb: "is",
+  // beVerbPlural: "are",
+  // "key": "{{beVerb}}"
+
+  REQUIRED_FIELD: "$t(BE_VERB) required field",
+  REQUIRED_FIELD_plural: "$t(BE_VERB_plural) required fields",
+  WEAK_PASSWORD: "Password should have at least 6 caracteres",
+  INVALID_FORMAT_EMAIL: "The email you passed is not a valid one",
+  INVALID_FORMAT_PHONE: "The phone you passed is not a valid one",
+  INVALID_FORMAT_NAME: "The name you passed is not a valid one",
+  ALREADY_EXISTS: "already exists",
+  BE_VERB: "is",
+  BE_VERB_plural: "are",
+  BE_VERBWithCount: "{{count}} $t(BE_VERB)",
+  BE_VERBWithCount_plural: "{{count}} $t(BE_VERB_plural)",
+
+  // User translations
+  first_name: "First name",
+  last_name: "Last name",
+  display_name: "Display name",
+  username: "Username",
+  pluralFieldsRequired: "and",
+
+  // Regions translations
+  name: "Name",
+  area: "Area",
+  regions: "Regions",
+
+  // Cart translations
+  adjustment_total: "Adjustment total",
+  total: "Total",
+  item_total: "Item total",
+  payment_total: "Payment total",
+  shipment_total: "Shipment total",
+  additional_tax_total: "Additional tax total",
+  included_tax_total: "Included tax total",
+  promo_total: "Promo total",
+  state: "State",
+  email: "Email",
+  user_id: "User id",
+  completed_at: "Completed at",
+  bill_address: "Bill address",
+  ship_address: "Ship address",
+  shipment_state: "Shipment state",
+  payment_state: "Payment start",
+  special_instructions: "Special instructions",
+  currency: "Currency",
+  item_count: "Item count",
+  approver_by: "Approved by",
+  confirmation_email_delivered: "Confirmation email delivered",
+  token: "token",
+  canceled_by: "Canceled by",
+  store: "Store",
+
+  zip_code: "Zipcode",
+  city: "City",
+  country: "Country",
+  street: "Street",
+  number: "Number",
+  neighbourhood: "Neighbourhood",
+  location: "Location"
+};

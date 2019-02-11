@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "name": "Backend API",
+      "script": "yarn",
+      "args": "start:prod",
+      "instances": "max",
+      "exec_mode": "cluster"
+    }
+  ]
+}
