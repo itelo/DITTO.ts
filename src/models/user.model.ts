@@ -1,4 +1,3 @@
-// import StackGlobalConfig from "src/config/index";
 import mongoose, { HookNextFunction } from "mongoose";
 import configStack from "@config/index";
 import crypto from "crypto";
@@ -6,13 +5,11 @@ import validator from "validator";
 import generatePassword from "generate-password";
 import blacklistPassword from "@config/assets/blacklist-password";
 import { Codes } from "@utils/constants/codes";
-// import * as owasp from "owasp-password-strength-test";
 import chalk from "chalk";
 import createSeed from "@utils/models/createSeed";
 import { HttpStatus } from "@utils/constants/httpStatus";
 import states from "@utils/constants/states";
 const config = configStack.config;
-// owasp.config(config.shared.owasp);
 
 const Schema = mongoose.Schema;
 

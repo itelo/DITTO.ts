@@ -13,11 +13,6 @@ import { saveOAuthUserProfile } from "@modules/users/controllers/v1/users.authen
 
 export default () => {
   const { facebook } = configStack.config;
-  // const facebook = {
-  //   clientID: config.facebook.clientId,
-  //   clientSecret: config.facebook.clientSecret,
-  //   callbackURL: config.facebook.callbackURL
-  // };
 
   const opts = {
     clientID: facebook.clientID,

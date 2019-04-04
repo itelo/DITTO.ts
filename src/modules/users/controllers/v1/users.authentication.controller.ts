@@ -180,7 +180,7 @@ export function oauthCallback(req: Request, res: Response, next: NextFunction) {
           _id: _id.toHexString()
         }
       };
-      console.log(JSON.stringify(data));
+
       res
         .status(301)
         .redirect(

@@ -10,8 +10,7 @@
     "build": "npx gulp build",
     "docs": "apidoc -i src -o public",
     "docs-md": "npx gulp docs:markdown",
-    "exec:ts": "ts-node --project tsconfig.json -r tsconfig-paths/register",
-    "clean-description": "yarn exec:ts scripts/products.ts"
+    "exec:ts": "ts-node --project tsconfig.json -r tsconfig-paths/register"
   },
   "husky": {
     "hooks": {

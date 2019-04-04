@@ -36,9 +36,6 @@ export default () => {
         profile: Profile,
         done: (error: any, user?: any, info?: any) => void
       ) => {
-        console.log({ accessToken });
-        console.log({ refreshToken });
-        console.log({ profile });
         // Set the provider data and include tokens
         const providerData = profile._json;
         providerData.accessToken = accessToken;
