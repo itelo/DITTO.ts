@@ -119,16 +119,14 @@ export function generateSignedUrl(
 export function resizeImage(
   filepath: string,
   size: number,
-  quality: number = 80
+  quality: number = 80,
+  format: "jpeg" | "webp" = "jpeg"
 ): Promise<ResizedResult> {
   return new Promise((resolve, reject) => {
     const resizedFilepath = `${filepath}-x${size}`;
     sharp(filepath)
       .resize(size)
-      // .webp({
-      //   quality
-      // })
-      .jpeg({
+      [format]({
         quality
       })
       .toFile(resizedFilepath)
