@@ -1,22 +1,13 @@
-BitX boilerplate to Typescript and Express.js 
+Mongo Express Typescript Node Rest and GraphQL Boilerplate
 =========================
 
-An Express.js project implemented using Typescript with strongly typed objects (based on Microsoft/TypeScript-Node-Starter):
+(based on [Microsoft/TypeScript-Node-Starter](https://github.com/Microsoft/TypeScript-Node-Starter) and [MEAN.js](https://github.com/meanjs/mean)):
 
-## Quick Install
+DITTO.ts is a backend Typecript open-source solution, which provides a solid starting point for [MongoDB](http://www.mongodb.org/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), [GraphQL](https://graphql.org/) and [Typescript](https://www.typescriptlang.org/) based applications. The idea is to solve the common issues with connecting those frameworks, build a robust framework to support daily development needs, and help developers use better practices while working with popular JavaScript and Typescript components.
 
-Once you've downloaded the boilerplate and installed all the prerequisites, you're just a few steps away from starting to develop your application.
+## Documentation
 
-The boilerplate comes pre-bundled with a `package.json` file that contain the list of modules you need to start your application.
-
-To install the dependencies, run this in the application folder from the command-line:
-
-```bash
-npm install -g yarn
-yarn
-
-mongorestore backend-dev/ --db=backend-dev
-```
+For now, you can check the meanjs documentation, we are working in a good one.
 
 ## Running Your Application
 
