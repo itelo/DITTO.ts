@@ -1,83 +1,41 @@
 import { Request, Response, NextFunction } from "express";
 import { ErrorHandler } from "types/utils/errorHandler";
-import { UserModel } from "src/models/user.model";
-import { UserAdminModel } from "src/models/admin.model";
-// import { UserStoreAdminModel } from "@models/store.admin.model";
-import { model } from "mongoose";
+import User, { UserModel, SafeUser } from "src/models/user.model";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import * as jwt from "jsonwebtoken";
 import passport from "passport";
 import configStack from "@config/index";
 
-const User = model("User");
-const Admin = model("Admin");
-// const StoreAdmin = model(tytypety"UserStoreAdmin");
-
 // Setup work and export for the JWT passport strategy
 export default function() {
   const config = configStack.config;
   const opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme(config.jwt.prefix),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: config.jwt.secret
   };
 
-  // switch (jwt_payload.roles.includes) {
-  // "admin":
-  // }
-
-  // "admin", "user", "storeAdmin";
-
   passport.use(
-    new JwtStrategy(opts, (jwt_payload, done) => {
-      for (const role of jwt_payload.roles) {
-        switch (role) {
-          case "user":
-            return User.findOne({ _id: jwt_payload._id })
-              .then((user: UserModel) => {
-                // console.log(user);
-                if (user) {
-                  return done(undefined, user.toJSON());
-                  // return done(undefined, jwt_payload);
-                } else {
-                  // return done(undefined, jwt_payload);
-                  return done(undefined, false);
-                }
-              })
-              .catch((err: Error) => {
-                console.log("return done(err, false);");
-                return done(err, false);
-              });
-          case "admin":
-            return Admin.findOne({ _id: jwt_payload._id })
-              .then((userAdmin: UserAdminModel) => {
-                if (userAdmin) {
-                  return done(undefined, userAdmin.toJSON());
-                } else {
-                  return done(undefined, false);
-                }
-              })
-              .catch((err: Error) => {
-                return done(err, false);
-              });
-          // case "store-admin":
-          //   return StoreAdmin.findOne({ _id: jwt_payload._id })
-          //     .then((userStoreAdmin: UserStoreAdminModel) => {
-          //       if (userStoreAdmin) {
-          //         return done(undefined, userStoreAdmin.toJSON());
-          //       } else {
-          //         return done(undefined, false);
-          //       }
-          //     })
-          //     .catch((err: Error) => {
-          //       return done(err, false);
-          //     });
-        }
-      }
-      // jwt_payload.roles.includes("storeAdmin");
-      // return done(undefined, jwt_payload);
-    })
+    new JwtStrategy(opts, (jwt_payload, done) =>
+      User.findOne({ _id: jwt_payload._id })
+        .then((user: UserModel) => {
+          if (user) {
+            return done(undefined, user.toJSON());
+          } else {
+            return done(undefined, false);
+          }
+        })
+        .catch((err: Error) => {
+          console.log("return done(err, false);");
+          return done(err, false);
+        })
+    )
   );
 }
+
+type ConfiguredUserAndToken = {
+  user: SafeUser;
+  token: string;
+};
 
 /**
  * @function sanitizeUser
@@ -86,9 +44,9 @@ export default function() {
  * @returns an object that contains a JWT and SafeUser
  */
 export function configureUserAndToken(
-  user: UserModel | UserAdminModel
+  user: UserModel
   // | UserStoreAdminModel
-) {
+): ConfiguredUserAndToken {
   // remove the sensitive data before send to client
   const safeUser = sanitizeUser(user);
   // select only the essential data to save on jwt
@@ -118,7 +76,7 @@ export function configureUserAndToken(
  * @returns {SafeUser}
  */
 export function sanitizeUser(
-  user: UserModel | UserAdminModel
+  user: UserModel
   // | UserStoreAdminModel
 ) {
   try {

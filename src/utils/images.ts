@@ -125,6 +125,9 @@ export function resizeImage(
     const resizedFilepath = `${filepath}-x${size}`;
     sharp(filepath)
       .resize(size)
+      // .webp({
+      //   quality
+      // })
       .jpeg({
         quality
       })
@@ -180,5 +183,5 @@ export function resizeUploadToFirebaseAndGetURL(
 export interface ResizedResult {
   path: string;
   size: number;
-  mimetype: "image/jpeg";
+  mimetype: "image/jpeg" | "image/webp";
 }

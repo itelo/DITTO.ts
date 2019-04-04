@@ -36,6 +36,8 @@ export interface Files {
   configs: string[];
   policies: string[];
   sockets: string[];
+  typedefs: string[];
+  resolvers: string[];
   validations: [string];
   i18n: string;
 }
@@ -115,6 +117,16 @@ export interface ConfigEnvsObject {
   jwt: {
     secret: string;
     prefix: string;
+  };
+  facebook: {
+    clientID: string;
+    clientSecret: string;
+    callbackURL: string;
+  };
+  google: {
+    clientID: string;
+    clientSecret: string;
+    callbackURL: string;
   };
   multer: {
     userImagePath: string;

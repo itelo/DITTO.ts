@@ -93,10 +93,22 @@ export function isAllowed(
   next: NextFunction
 ) {
   const roles = req.user ? req.user.roles : ["guest"];
-  const { userId } = req.params;
-  const user = req.user as UserModel;
+  const { userId, addressId } = req.params;
+  const user: UserModel = req.user;
 
-  console.log(req.get("authorization"));
+  // if addressId is passed, it has to check if it belongs to user
+  if (addressId) {
+    if (
+      user
+      //  &&
+      // user.addresses.find(({ _id }) =>
+      //   _id ? _id.toString() === addressId : false
+      // )
+    ) {
+      return next();
+    }
+  }
+
   if (req.user && userId && req.user._id.toString() === userId) {
     return next();
   }

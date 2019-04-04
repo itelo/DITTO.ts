@@ -16,7 +16,6 @@ import lusca from "lusca";
 import i18next, { Resource } from "i18next";
 import cors from "cors";
 import logger from "./logger";
-
 import * as responses from "@utils/formaters/responses";
 import { Codes } from "@utils/constants/codes";
 import { HttpStatus } from "@utils/constants/httpStatus";
@@ -56,7 +55,11 @@ function initLocalVariables(app: Application, config: ConfigEnvsObject) {
  */
 function initMiddleware(app: Application, config: ConfigEnvsObject) {
   //
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "http://localhost:3001"
+    })
+  );
 
   // Should be placed before express.static
   app.use(
@@ -193,6 +196,13 @@ function initStaticRoutes(app: Application) {
 }
 
 /**
+ * Configure Graphql
+ */
+function configureGraphql(app: Application, config: ConfigEnvsObject) {
+  require("./graphql").default(app, config);
+}
+
+/**
  * Configure Socket.io
  */
 function configureSocketIO(app: Application) {
@@ -265,6 +275,8 @@ export function init(config: ConfigEnvsObject) {
   initModulesServerRoutes(app, config);
 
   initStaticRoutes(app);
+
+  configureGraphql(app, config);
 
   // init
   initI18N(app, config);

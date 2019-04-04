@@ -19,6 +19,8 @@ const serverAssets = {
     "src/modules/core/routes/**/*.ts"
   ],
   sockets: "src/modules/*/sockets/**/*.ts",
+  typedefs: "src/modules/*/typedefs/**/*.ts",
+  resolvers: "src/modules/*/resolvers/**/*.ts",
   configs: ["src/modules/*/config/*.ts"],
   policies: "src/modules/*/policies/**/*.ts",
   validations: "src/modules/*/validations/**/*.ts",

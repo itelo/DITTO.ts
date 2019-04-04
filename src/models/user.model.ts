@@ -32,17 +32,21 @@ export interface SafeUser {
   email: string;
   document: string;
   phone: string;
-  // username: string;
+
   city: string;
   state: string;
   profile_image_urls: {
     original: string;
-    x100: string;
     x256: string;
+    x720: string;
   };
   provider: string;
   provider_data: object;
-  additional_providers_data: object;
+  additional_providers_data?: any;
+  // {
+  //   facebook?: any;
+  //   google?: any;
+  // };
   roles: string[];
   updated: Date;
   created: Date;
@@ -52,7 +56,17 @@ export interface UserModel extends UserModelMethods, SafeUser {
   password: string;
   salt: string;
 }
-//  Exclude<UserModel, "password" | "salt">;
+
+export enum USER_ROLES {
+  USER = "user",
+  ADMIN = "admin"
+}
+
+export enum USER_PROVIDERS {
+  LOCAL = "local",
+  GOOGLE = "google",
+  FACEBOOK = "facebook"
+}
 
 /**
  * A Validation function for local strategy properties
@@ -61,8 +75,7 @@ const validateLocalStrategyProperty = {
   validator(property: any) {
     return (this.provider !== "local" && !this.updated) || property.length;
   },
-  // @ts-ignore
-  message: props => "should not be empty"
+  message: () => "should not be empty"
 };
 
 /**
@@ -92,47 +105,20 @@ const validatePhone = {
 };
 
 /**
- * A Validation function for username
- * - at least 3 characters
- * - only a-z0-9_-.
- * - contain at least one alphanumeric character
- * - not in list of illegal usernames
- * - no consecutive dots: "." ok, ".." nope
- * - not begin or end with "."
- */
-const validateUsername = {
-  validator(username: any) {
-    const usernameRegex = /^(?=[\w.-]+$)(?!.*[._-]{2})(?!\.)(?!.*\.$).{3,34}$/;
-    return (
-      this.provider !== "local" ||
-      (username &&
-        usernameRegex.test(username) &&
-        !config.illegalUsernames.includes(username))
-    );
-  },
-  // @ts-ignore
-  message: props => ({
-    status: HttpStatus.UNPROCESSABLE_ENTITY,
-    code: Codes.AUTH__INVALID_USERNAME_FORMAT,
-    message: `Please enter a valid username: 3+ characters long, non restricted word, characters "_-.", no consecutive dots, does not begin or end with dots, letters a-z and numbers 0-9.`
-  })
-};
-
-/**
  * User Schema
  */
 const UserSchema = new Schema({
   first_name: {
     type: String,
     trim: true,
-    default: "",
-    validate: validateLocalStrategyProperty
+    default: ""
+    // validate: validateLocalStrategyProperty
   },
   last_name: {
     type: String,
     trim: true,
-    default: "",
-    validate: validateLocalStrategyProperty
+    default: ""
+    // validate: validateLocalStrategyProperty
   },
   display_name: {
     type: String,
@@ -162,26 +148,15 @@ const UserSchema = new Schema({
     },
     lowercase: true,
     trim: true,
-    required: true,
     validate: validatePhone
   },
-  // username: {
-  //   type: String,
-  //   unique: "Username already exists",
-  //   required: "should not be empty",
-  //   validate: validateUsername,
-  //   lowercase: true,
-  //   trim: true
-  // },
   city: {
     type: String,
-    trim: true,
-    required: true
+    trim: true
   },
   state: {
     type: String,
     enum: states,
-    required: true,
     trim: true,
     uppercase: true
   },
@@ -197,11 +172,11 @@ const UserSchema = new Schema({
       type: String,
       default: "/public/images/common/default.png"
     },
-    x100: {
+    x256: {
       type: String,
       default: "/public/images/common/default.png"
     },
-    x256: {
+    x720: {
       type: String,
       default: "/public/images/common/default.png"
     }
@@ -216,16 +191,16 @@ const UserSchema = new Schema({
     type: [
       {
         type: String,
-        enum: ["user", "admin"]
+        enum: [USER_ROLES.ADMIN, USER_ROLES.USER]
       }
     ],
-    default: ["user"],
+    default: [USER_ROLES.USER],
     required: "Please provide at least one role"
   },
-  updated: {
+  updated_at: {
     type: Date
   },
-  created: {
+  created_at: {
     type: Date,
     default: Date.now
   },
@@ -235,7 +210,12 @@ const UserSchema = new Schema({
   },
   reset_password_expires: {
     type: Date
-  }
+  },
+  albums: [
+    {
+      album_id: String
+    }
+  ]
 });
 
 /**
@@ -255,10 +235,10 @@ UserSchema.pre("save", function(next: HookNextFunction) {
  */
 UserSchema.pre("validate", function(next: HookNextFunction) {
   if (
-    (this.provider === "local" &&
+    (this.provider === USER_PROVIDERS.LOCAL &&
       this.password &&
       this.isModified("password")) ||
-    (this.provider === "local" && this.password === "")
+    (this.provider === USER_PROVIDERS.LOCAL && this.password === "")
   ) {
     if (blacklistPassword.includes(this.password)) {
       this.invalidate("password", Codes.AUTH__BLACKLIST_PASSWORD);

@@ -5,6 +5,9 @@ export interface ConfigAssetsObject {
   configs: [string];
   policies: [string];
   sockets: [string];
+  typedefs: [string];
+  resolvers: [string];
   validations: [string];
+
   i18n: string;
 }

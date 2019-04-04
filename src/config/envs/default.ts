@@ -31,17 +31,17 @@ const serverEnv = {
   },
   firebase: {
     app: {
-      databaseURL: "https://bitx-cloud.firebaseio.com"/*,
+      // databaseURL: "https://bitx-cloud.firebaseio.com"/*,
       credential: process.env.FIREBASE_ADMIN_JSON
         ? firebaseAdmin.credential.cert(
             JSON.parse(process.env.FIREBASE_ADMIN_JSON)
           )
         : firebaseAdmin.credential.cert(
-            require("../../../bitx-cloud-firebase-adminsdk.json")
-          )*/
+            require("../../../firebase-admin-sdk.json")
+          )
     },
     storage: {
-      bucketName: "bitx-cloud.appspot.com"
+      bucketName: "gallerist-b72a4.appspot.com"
     }
   },
   illegalUsernames: [

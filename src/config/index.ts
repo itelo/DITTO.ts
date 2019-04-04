@@ -187,6 +187,12 @@ const initGlobalConfigFiles = (
   // Setting Globbed socket files
   config.files.sockets = getGlobbedPaths(assets.sockets);
 
+  // Setting Globbed typedef files
+  config.files.typedefs = getGlobbedPaths(assets.typedefs);
+
+  // Setting Globbed resolver files
+  config.files.resolvers = getGlobbedPaths(assets.resolvers);
+
   // Setting Globbed policies files
   config.files.policies = getGlobbedPaths(assets.policies);
 

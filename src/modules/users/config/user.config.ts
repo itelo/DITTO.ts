@@ -15,6 +15,7 @@ export default (app: Application) => {
   app.use(passport.initialize());
 
   app.use(handleJWTAuthentication);
+
   config.utils
     .getGlobbedPaths(
       path.join(__dirname, `./strategies/**/*.${config.extension}`)

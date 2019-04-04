@@ -37,14 +37,17 @@ export default {
     title: defaultEnvConfig.app.title + " - Development Environment"
   },
   facebook: {
-    clientID: process.env.FACEBOOK_ID || "APP_ID",
-    clientSecret: process.env.FACEBOOK_SECRET || "APP_SECRET",
-    callbackURL: "/api/auth/facebook/callback"
+    clientID: process.env.FACEBOOK_ID || "1115504748619282",
+    clientSecret:
+      process.env.FACEBOOK_SECRET || "52a352738735aa15ece887fd41d31968",
+    callbackURL: "/api/v1/auth/facebook/callback"
   },
   google: {
-    clientID: process.env.GOOGLE_ID || "APP_ID",
-    clientSecret: process.env.GOOGLE_SECRET || "APP_SECRET",
-    callbackURL: "/api/auth/google/callback"
+    clientID:
+      process.env.GOOGLE_ID ||
+      "712646864758-7v6lenm1cje5jlbg1ka100hlh7kpf3gt.apps.googleusercontent.com",
+    clientSecret: process.env.GOOGLE_SECRET || "VgWcQTNVPDAAXtQYAVK5xqNo",
+    callbackURL: "/api/v1/auth/google/callback"
   },
   paypal: {
     clientID: process.env.PAYPAL_ID || "CLIENT_ID",
