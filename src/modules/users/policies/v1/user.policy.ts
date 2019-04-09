@@ -41,14 +41,6 @@ export function invokeRolesPolicies() {
         {
           resources: "/api/v1/users/password",
           permissions: ["post"]
-        },
-        {
-          resources: "/api/v1/users/address",
-          permissions: ["post"]
-        },
-        {
-          resources: "/api/v1/users/address/:addressId",
-          permissions: ["delete"]
         }
       ]
     },
@@ -69,14 +61,6 @@ export function invokeRolesPolicies() {
         },
         {
           resources: "/api/v1/users/password",
-          permissions: ["*"]
-        },
-        {
-          resources: "/api/v1/users/address",
-          permissions: ["*"]
-        },
-        {
-          resources: "/api/v1/users/address/:addressId",
           permissions: ["*"]
         }
       ]

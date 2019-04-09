@@ -38,8 +38,6 @@ export default (app: Application) => {
     .get(authentication.oauthCallback);
 
   app.route("/api/v1/users/:userId");
-  // .all(policies.isAllowed)
-  // .get(users.read);
 
   // Finish by binding the article middleware
   app.param("userId", users.userByID);

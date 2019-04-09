@@ -276,9 +276,10 @@ describe("User model unit tests", () => {
       });
     });
 
-    it("should validate when the passphrase strength passes - 'Open-Source Full-Stack Solution For MEAN Applications'", () => {
+    it("should validate when the passphrase strength passes - 'Open-Source Backend Solution For Typescript Applications'", () => {
       const _user1 = new User(user1);
-      _user1.password = "Open-Source Full-Stack Solution For MEAN Applications";
+      _user1.password =
+        "Open-Source Backend Solution For Typescript Applications";
 
       _user1.validate(err => {
         expect(err).toBeNull();
@@ -413,33 +414,4 @@ describe("User model unit tests", () => {
       }
     });
   });
-
-  it("should allow valid email address - 'abc@abc.com'", done => {
-    const _user1 = new User(user1);
-
-    _user1.email = "abc@abc.com";
-    _user1.save(err => {
-      if (!err) {
-        _user1.remove(err_remove => {
-          expect(err).toBeNull();
-          expect(err_remove).toBeNull();
-          done();
-        });
-      } else {
-        expect(err).toBeNull();
-        done();
-      }
-    });
-  });
-
-  const addressWithoutLocation = {
-    name: "test",
-    state: "PA",
-    country: "Brazil",
-    city: "Belém",
-    zip_code: "66023120",
-    street: "Rua Avertano Rocha",
-    number: "228",
-    neighborhood: "Campina"
-  };
 });

@@ -5,10 +5,8 @@ import validator from "validator";
 import generatePassword from "generate-password";
 import blacklistPassword from "@config/assets/blacklist-password";
 import { Codes } from "@utils/constants/codes";
-import chalk from "chalk";
 import createSeed from "@utils/models/createSeed";
 import { HttpStatus } from "@utils/constants/httpStatus";
-import states from "@utils/constants/states";
 const config = configStack.config;
 
 const Schema = mongoose.Schema;
@@ -109,13 +107,11 @@ const UserSchema = new Schema({
     type: String,
     trim: true,
     default: ""
-    // validate: validateLocalStrategyProperty
   },
   last_name: {
     type: String,
     trim: true,
     default: ""
-    // validate: validateLocalStrategyProperty
   },
   display_name: {
     type: String,
@@ -132,30 +128,15 @@ const UserSchema = new Schema({
     default: "",
     validate: validateLocalStrategyEmail
   },
-  document: {
-    type: String,
-    trim: true,
-    validate: (doc: string) => /^[0-9]{11}$/.test(doc)
-  },
   phone: {
     type: String,
     index: {
       unique: true,
-      sparse: true // For this to work on a previously indexed field, the index must be dropped & the application restarted.
+      sparse: true
     },
     lowercase: true,
     trim: true,
     validate: validatePhone
-  },
-  city: {
-    type: String,
-    trim: true
-  },
-  state: {
-    type: String,
-    enum: states,
-    trim: true,
-    uppercase: true
   },
   password: {
     type: String,

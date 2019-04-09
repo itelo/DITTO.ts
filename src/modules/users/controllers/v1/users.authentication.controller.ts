@@ -44,7 +44,6 @@ export async function signup(req: Request, res: Response) {
  * Singin api, provide a way to the user get the user and token
  * to sign, the email and password is required, the login can be
  * also achieve by username and password
- *
  */
 export async function signin(req: Request, res: Response) {
   // first search user by email
