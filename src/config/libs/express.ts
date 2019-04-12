@@ -199,7 +199,11 @@ function initStaticRoutes(app: Application) {
  * Configure Graphql
  */
 function configureGraphql(app: Application, config: ConfigEnvsObject) {
-  require("./graphql").default(app, config);
+  // Load the Socket.io configuration
+  const server = require("./graphqlv2").default(app, config);
+
+  // Return server object
+  return server;
 }
 
 /**
@@ -254,7 +258,7 @@ async function initI18N(app: Application, config: ConfigEnvsObject) {
  */
 export function init(config: ConfigEnvsObject) {
   // Initialize express app
-  let app = express();
+  const app = express();
 
   // Initialize local variables
   initLocalVariables(app, config);
@@ -276,13 +280,11 @@ export function init(config: ConfigEnvsObject) {
 
   initStaticRoutes(app);
 
-  configureGraphql(app, config);
-
   // init
   initI18N(app, config);
 
-  // Configure Socket.io
-  app = configureSocketIO(app);
+  // configure graphql
+  const server = configureGraphql(app, config);
 
-  return app;
+  return server;
 }

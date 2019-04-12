@@ -44,17 +44,6 @@ const serverEnv = {
       bucketName: "gallerist-b72a4.appspot.com"
     }
   },
-  illegalUsernames: [
-    "administrator",
-    "password",
-    "admin",
-    "user",
-    "unknown",
-    "anonymous",
-    "null",
-    "undefined",
-    "api"
-  ],
   gMaps: {
     apiKey: process.env.GOOGLE_MAPS_API_KEY
   },

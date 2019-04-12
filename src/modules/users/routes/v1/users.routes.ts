@@ -1,44 +1,29 @@
 import { Application } from "express";
 
-import * as users from "@modules/users/controllers/v1/users.controller";
-import * as authentication from "@modules/users/controllers/v1/users.authentication.controller";
-import * as validations from "@modules/users/validations/v1/user.validation";
-import * as password from "@modules/users/controllers/v1/users.password.controller";
-import * as policies from "@modules/users/policies/v1/user.policy";
-import { middleware } from "express-paginate";
+import * as authenticationLocal from "@modules/users/controllers/v1/authentication/users.authentication.local.controller";
+import * as authenticationOauth from "@modules/users/controllers/v1/authentication/users.authentication.oauth.controller";
+import * as profile from "@modules/users/controllers/v1/profile/users.profile.password.controller";
+import * as middleware from "@modules/users/controllers/v1/users.middleware.controller";
 
 // API V1 User Routes
 export default (app: Application) => {
-  app
-    .route("/api/v1/users")
-    .all(policies.isAllowed)
-    .put(validations.edit, users.edit);
-
   // Setting up the users profile api
-  app.route("/api/v1/users/me").get(users.me);
+  app.route("/api/v1/users/me").get(authenticationLocal.me);
 
-  app
-    .route("/api/v1/users/profile")
-    .all(policies.isAllowed)
-    .post(users.changeProfilePicture);
-
-  app
-    .route("/api/v1/users/password")
-    .all(policies.isAllowed)
-    .post(validations.changePassword, password.changePassword);
+  app.route("/api/v1/users/password").post(profile.changePassword);
 
   // Setting up the users authentication api
-  app.route("/api/v1/signup").post(validations.signup, authentication.signup);
-  app.route("/api/v1/signin").post(validations.signin, authentication.signin);
+  app.route("/api/v1/signup").post(authenticationLocal.signup);
+  app.route("/api/v1/signin").post(authenticationLocal.signin);
 
   // Setting the oauth routes
-  app.route("/api/v1/auth/:strategy").get(authentication.oauthCall);
+  app.route("/api/v1/auth/:strategy").get(authenticationOauth.oauthCall);
   app
     .route("/api/v1/auth/:strategy/callback")
-    .get(authentication.oauthCallback);
+    .get(authenticationOauth.oauthCallback);
 
   app.route("/api/v1/users/:userId");
 
   // Finish by binding the article middleware
-  app.param("userId", users.userByID);
+  app.param("userId", middleware.userByID);
 };

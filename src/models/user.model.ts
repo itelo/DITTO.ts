@@ -16,7 +16,6 @@ export type UserModelMethods = mongoose.Document & {
   reset_password_expires: Date;
   hashPassword: Function;
   authenticate: Function;
-  generateRandomPassphrase: Function;
   seed: Function;
 };
 
@@ -37,14 +36,14 @@ export interface SafeUser {
   };
   provider: string;
   provider_data: object;
-  additional_providers_data?: any;
-  // {
-  //   facebook?: any;
-  //   google?: any;
-  // };
+  additional_providers_data?: {
+    facebook?: any;
+    google?: any;
+  };
   roles: string[];
-  updated: Date;
-  created: Date;
+  created_at: Date;
+  updated_at?: Date;
+  deleted_at?: Date;
 }
 
 export interface UserModel extends UserModelMethods, SafeUser {
@@ -160,6 +159,11 @@ const UserSchema = new Schema({
     }
   },
   provider: {
+    enum: [
+      USER_PROVIDERS.LOCAL,
+      USER_PROVIDERS.GOOGLE,
+      USER_PROVIDERS.FACEBOOK
+    ],
     type: String,
     required: "should not be empty"
   },
@@ -181,6 +185,9 @@ const UserSchema = new Schema({
   created_at: {
     type: Date,
     default: Date.now
+  },
+  deleted_at: {
+    type: Date
   },
   /* For reset password */
   reset_password_token: {
@@ -247,71 +254,9 @@ UserSchema.methods.authenticate = function(password: string) {
 };
 
 /**
- * Find possible not used username
- */
-UserSchema.statics.findUniqueUsername = (
-  username: string,
-  suffix: string,
-  callback: Function
-) => {
-  const possibleUsername = username.toLowerCase() + (suffix || "");
-
-  this.findOne({
-    username: possibleUsername
-  })
-    .then((user: UserModel) => {
-      if (!user) {
-        callback(possibleUsername);
-      } else {
-        return this.findUniqueUsername(
-          username,
-          `${suffix || 0} + 1`,
-          callback
-        );
-      }
-    })
-    .catch((err: Error) => {
-      if (!err) {
-      } else {
-        callback(undefined);
-      }
-    });
-};
-
-/**
- * Generates a random passphrase that passes the owasp test
- * Returns a promise that resolves with the generated passphrase, or rejects with an error if something goes wrong.
- * NOTE: Passphrases are only tested against the required owasp strength tests, and not the optional tests.
- */
-UserSchema.statics.generateRandomPassphrase = () =>
-  new Promise((resolve, reject) => {
-    let password = "";
-    const repeatingCharacters = new RegExp("(.)\\1{2,}", "g");
-
-    // iterate until the we have a valid passphrase
-    // NOTE: Should rarely iterate more than once, but we need this to ensure no repeating characters are present
-    while (password.length < 20 || repeatingCharacters.test(password)) {
-      // build the random password
-      password = generatePassword.generate({
-        length: Math.floor(Math.random() * 20) + 20, // randomize length between 20 and 40 characters
-        numbers: true,
-        symbols: false,
-        uppercase: true,
-        excludeSimilarCharacters: true
-      });
-
-      // check if we need to remove any repeating characters
-      password = password.replace(repeatingCharacters, "");
-    }
-
-    // resolve with the validated passphrase
-    resolve(password);
-  });
-
-/**
  * Seeds the User collection with document (User)
  * and provided options.
  */
-UserSchema.statics.seed = createSeed("User", "username");
+UserSchema.statics.seed = createSeed("User", "_id");
 
 export default mongoose.model<UserModel>("User", UserSchema);

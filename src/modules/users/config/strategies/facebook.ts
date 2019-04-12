@@ -9,7 +9,7 @@ import {
   VerifyFunction
 } from "passport-facebook";
 import configStack from "@config/index";
-import { saveOAuthUserProfile } from "@modules/users/controllers/v1/users.authentication.controller";
+import { saveOAuthUserProfile } from "@modules/users/controllers/v1/authentication/users.authentication.oauth.controller";
 
 export default () => {
   const { facebook } = configStack.config;

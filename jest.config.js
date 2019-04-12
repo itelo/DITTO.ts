@@ -1,15 +1,16 @@
 module.exports = {
   globals: {
     "ts-jest": {
+      diagnostics: true,
       tsConfig: "tsconfig.json"
     }
   },
-  // collectCoverage: true,
   collectCoverageFrom: [
-    "src/modules/**/*.ts",
-    "src/utils/**/*.ts",
-    "src/config/libs/*.ts",
-    "src/config/index.ts"
+    "src/models/**/*.ts"
+    // "src/modules/**/*.ts"
+    // "src/utils/**/*.ts",
+    // "src/config/libs/*.ts",
+    // "src/config/index.ts"
   ],
   moduleFileExtensions: ["ts", "js"],
   moduleNameMapper: {

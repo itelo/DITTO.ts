@@ -61,6 +61,8 @@ export async function connect(config: ConfigEnvsObject, callback?: Function) {
     memoryOptions = result.memoryOptions;
   }
 
+  console.log({ mongoURI });
+
   const options: any = lodash.merge(
     config.db.options || {},
     {
@@ -70,10 +72,7 @@ export async function connect(config: ConfigEnvsObject, callback?: Function) {
   );
 
   mongoose
-    .connect(
-      mongoURI,
-      options
-    )
+    .connect(mongoURI, options)
     // @ts-ignore
     .then(() => {
       // Enabling mongoose debug mode if required

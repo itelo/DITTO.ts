@@ -3,30 +3,17 @@ import request from "supertest";
 import configStack from "@config/index";
 import * as server from "@config/libs/app";
 import * as db from "@config/libs/mongoose";
-import User, { UserModel } from "src/models/user.model";
+import User, { UserModel } from "@models/user.model";
 import fetch from "node-fetch";
 
 jest.mock("node-fetch");
+
 const config = configStack.config;
-// user.model.pt-BR.test
 let app: Application;
 
 const user1: UserModel = new User();
 let user2: UserModel = new User();
 const user3: UserModel = new User();
-
-const gMapsResponse = {
-  results: [
-    {
-      geometry: {
-        location: {
-          lat: -1.4572811,
-          lng: -48.4990918
-        }
-      }
-    }
-  ]
-};
 
 describe("User model unit tests", () => {
   beforeAll(async done => {

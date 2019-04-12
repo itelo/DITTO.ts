@@ -1,6 +1,6 @@
 import passport from "passport";
-import User, { UserModel } from "@models/user.model";
-
+import User, { UserModel, USER_PROVIDERS, SafeUser } from "@models/user.model";
+import { Types } from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import * as errorHandler from "@utils/errorHandler";
 import { ErrorHandler } from "types/utils/errorHandler";
@@ -11,126 +11,14 @@ import * as responses from "@utils/formaters/responses";
 import { ProviderUserProfile } from "@modules/users/config/strategies/facebook";
 import qs from "qs";
 
-// URLs for which user can't be redirected on signin
-const noReturnUrls = ["/authentication/signin", "/authentication/signup"];
-
-export async function signup(req: Request, res: Response) {
-  // For security measurement we remove the roles from the req.body object
-  req.body.roles = undefined;
-
-  // Init user and add missing fields
-  const user = new User(req.body);
-
-  user.provider = "local";
-
-  // Then save the user
-  try {
-    const userDoc = (await user.save()) as UserModel;
-    const data = configureUserAndToken(userDoc);
-
-    return responses.sendSuccessful(res, data, HttpStatus.OK);
-  } catch (err) {
-    console.log(err);
-    const {
-      code,
-      message,
-      status
-    } = errorHandler.getErrorMessageCodeAndHttpStatus(err);
-    responses.sendError(res, code, message, status);
-  }
-}
-
-/**
- * Singin api, provide a way to the user get the user and token
- * to sign, the email and password is required, the login can be
- * also achieve by username and password
- */
-export async function signin(req: Request, res: Response) {
-  // first search user by email
-  const { email, password, username } = req.body;
-  const query = [];
-
-  if (email) {
-    query.push({ email: email.toLowerCase() });
-  }
-
-  if (username) {
-    query.push({ username: username.toLowerCase() });
-  }
-
-  const field = !email ? "username" : "email";
-
-  return User.findOne({
-    $or: query
-  })
-    .then(async (userDoc: UserModel) => {
-      // console.log(userDoc);
-      // then validate the password of the user founded
-      if (!userDoc) {
-        const message = `Cound not found any user with that ${field} `;
-        return responses.sendError(
-          res,
-          Codes.AUTH__USER_NOT_FOUND,
-          message,
-          HttpStatus.UNPROCESSABLE_ENTITY
-        );
-      } else if (userDoc.provider !== "local") {
-        let additionalProvidersName: any = [];
-        if (userDoc.additional_providers_data) {
-          // @ts-ignore
-          additionalProvidersName = Object.keys(
-            userDoc.additional_providers_data
-          );
-        }
-        const providers = [userDoc.provider, ...additionalProvidersName];
-        return res.json({
-          message: `auth/provider-not-local:${providers}`
-        });
-      } else if (!userDoc.authenticate(password)) {
-        const message = `The password not match if the ${field} you passed`;
-        return responses.sendError(
-          res,
-          Codes.AUTH__WRONG_PASSWORD,
-          message,
-          HttpStatus.UNPROCESSABLE_ENTITY
-        );
-      } else {
-        const data = configureUserAndToken(userDoc);
-
-        return responses.sendSuccessful(res, data, HttpStatus.OK);
-      }
-    })
-    .catch((err: ErrorHandler) => {
-      const {
-        code,
-        message,
-        status
-      } = errorHandler.getErrorMessageCodeAndHttpStatus(err);
-      responses.sendError(res, code, message, status);
-    });
-}
-
 /**
  * OAuth provider call
  */
 export function oauthCall(req: Request, res: Response, next: NextFunction) {
   const strategy = req.params.strategy;
-  // console.log({ req });
 
-  const redirectTo = req.query.redirectTo;
-  // res.header("Access-Control-Allow-Origin", "*");
-  console.log(
-    `/api/v1/auth/facebook/callback?redirectTo=${encodeURIComponent(
-      redirectTo
-    )}`
-  );
   // Authenticate
-  passport.authenticate(strategy, {
-    // @ts-ignore
-    // callbackURL: `/api/v1/auth/${strategy}/callback?redirectTo=${encodeURIComponent(
-    //   redirectTo
-    // )}`
-  })(req, res, next);
+  passport.authenticate(strategy)(req, res, next);
 }
 
 /**
@@ -139,57 +27,35 @@ export function oauthCall(req: Request, res: Response, next: NextFunction) {
 export function oauthCallback(req: Request, res: Response, next: NextFunction) {
   const strategy = req.params.strategy;
 
-  const redirectTo = req.query.redirectTo;
-  // res.header("Access-Control-Allow-Origin", "*");
-  // console.log("serio?");
-  // console.log(
-  //   `/api/v1/auth/facebook/callback?redirectTo=${encodeURIComponent(
-  //     redirectTo
-  //   )}`
-  // );
-  // info.redirect_to contains inteded redirect path
-  passport.authenticate(
-    strategy,
-    {
-      // @ts-ignore
-      // callbackURL: `/api/v1/auth/${strategy}/callback?redirectTo=${encodeURIComponent(
-      //   redirectTo
-      // )}`
-    },
-    (err: any, user: any, und: any) => {
-      console.log({ und });
-      if (err) {
-        // return res.redirect(
-        console.log(err);
-        // `/authentication/signin?err=${encodeURIComponent(
-        console.log(errorHandler.getErrorMessageCodeAndHttpStatus(err));
-        // )}`
-        // );
-      }
-
-      const { token, user: userSafe } = configureUserAndToken(user);
-
-      // @ts-ignore
-      const { _id, ...userSafeWithotId } = userSafe;
-
-      const data = {
-        token,
-        user: {
-          ...userSafeWithotId,
-          _id: _id.toHexString()
-        }
-      };
-
-      res
-        .status(301)
-        .redirect(
-          `http://localhost:3001/oath/callback?data=${qs.stringify(data)}`
-        );
+  passport.authenticate(strategy, {}, (err: any, user: any, und: any) => {
+    console.log({ und });
+    if (err) {
+      console.log(err);
+      console.log(errorHandler.getErrorMessageCodeAndHttpStatus(err));
     }
-  )(req, res, next);
+
+    const { token, user: userSafe } = configureUserAndToken(user);
+
+    const { _id, ...userSafeWithotId } = userSafe as SafeUser & {
+      _id: Types.ObjectId;
+    };
+
+    const data = {
+      token,
+      user: {
+        ...userSafeWithotId,
+        _id: _id.toHexString()
+      }
+    };
+
+    res
+      .status(301)
+      .redirect(
+        `http://localhost:3001/oath/callback?data=${qs.stringify(data)}`
+      );
+  })(req, res, next);
 }
 
-// }
 /**
  * Helper function to save or update a OAuth user profile
  */
@@ -265,7 +131,7 @@ export function saveOAuthUserProfile(
           done(undefined, user, info);
         } catch (err) {
           const { code } = errorHandler.getErrorMessageCodeAndHttpStatus(err);
-          if (code === "auth/email-already-in-use") {
+          if (code === Codes.AUTH__EMAIL_ALREADY_IN_USE) {
             try {
               const u = await User.findOne({ email: user.email });
               if (u) {
@@ -320,8 +186,11 @@ const addProviderToAnExistingUSer = async (
     user.additional_providers_data = {};
   }
 
-  user.additional_providers_data[providerUserProfile.provider] =
-    providerUserProfile.providerData;
+  const provider = providerUserProfile.provider as
+    | USER_PROVIDERS.FACEBOOK
+    | USER_PROVIDERS.GOOGLE;
+
+  user.additional_providers_data[provider] = providerUserProfile.providerData;
 
   // Then tell mongoose that we've updated the additional_providers_data field
   user.markModified("additional_providers_data");

@@ -19,13 +19,12 @@ export default function() {
       User.findOne({ _id: jwt_payload._id })
         .then((user: UserModel) => {
           if (user) {
-            return done(undefined, user.toJSON());
+            return done(undefined, user);
           } else {
             return done(undefined, false);
           }
         })
         .catch((err: Error) => {
-          console.log("return done(err, false);");
           return done(err, false);
         })
     )

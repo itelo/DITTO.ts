@@ -1,13 +1,30 @@
 import User, { UserModel } from "@models/user.model";
-
 import { sanitizeUser } from "@modules/users/config/strategies/jwt";
+import { PubSub } from "apollo-server";
+
+const pubsub = new PubSub();
 
 type GetUserArgs = {
   _id?: string;
   email?: string;
 };
 
+const GETTER_USER = "GETTER_USER";
+
 const UserResolveFunctions = {
+  Subscription: {
+    getterUser: {
+      resolve: (user: any) => {
+        console.log({ user });
+        return user;
+      },
+      // Additional event labels can be passed to asyncIterator creation
+      subscribe: () => {
+        console.log("subscribe");
+        return pubsub.asyncIterator([GETTER_USER]);
+      }
+    }
+  },
   Query: {
     getUsers: async () => {
       try {
@@ -24,6 +41,11 @@ const UserResolveFunctions = {
           $or: [{ _id }, { email }]
         });
         if (user) {
+          console.log(user._id);
+          console.log(
+            pubsub.publish(GETTER_USER, { getterUser: sanitizeUser(user) })
+          );
+
           return sanitizeUser(user);
         }
         throw "not found any user";

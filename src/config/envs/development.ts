@@ -49,12 +49,6 @@ export default {
     clientSecret: process.env.GOOGLE_SECRET || "VgWcQTNVPDAAXtQYAVK5xqNo",
     callbackURL: "/api/v1/auth/google/callback"
   },
-  paypal: {
-    clientID: process.env.PAYPAL_ID || "CLIENT_ID",
-    clientSecret: process.env.PAYPAL_SECRET || "CLIENT_SECRET",
-    callbackURL: "/api/auth/paypal/callback",
-    sandbox: true
-  },
   multer: {
     userImagePath: "./public/images/dev/users",
     variantImagePath: "./public/images/dev/variants",

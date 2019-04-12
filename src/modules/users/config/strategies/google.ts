@@ -7,7 +7,7 @@ import configStack from "@config/index";
 import passport from "passport";
 
 import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
-import { saveOAuthUserProfile } from "@modules/users/controllers/v1/users.authentication.controller";
+import { saveOAuthUserProfile } from "@modules/users/controllers/v1/authentication/users.authentication.oauth.controller";
 
 export default () => {
   const { google } = configStack.config;
