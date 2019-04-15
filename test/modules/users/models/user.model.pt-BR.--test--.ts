@@ -53,7 +53,7 @@ describe("User model unit tests", () => {
     it("should begin with saved users", done => {
       User.find({}, (err, users) => {
         expect(users.length).not.toBeNull();
-
+        expect(users).toMatchSnapshot();
         if (err) return done(err);
         done();
       });

@@ -50,6 +50,8 @@ describe("hello world", () => {
           expect(res.body.data.user).toHaveProperty("profile_image_urls");
           expect(res.body.data).toHaveProperty("token");
 
+          expect(JSON.stringify(res.body, undefined, 2)).toMatchSnapshot();
+
           if (err) return done(err);
           done();
         });

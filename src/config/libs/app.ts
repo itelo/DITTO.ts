@@ -6,24 +6,21 @@ import * as mongooseService from "@config/libs/mongoose";
 import * as express from "@config/libs/express";
 
 export function init(config: ConfigEnvsObject, callback: Function) {
-  if (process.env.NODE_ENV === "test") {
-    mongooseService.connectLoadAndSeed(config, (db: any) => {
-      const app = express.init(config);
-      if (callback) callback(app, db, config);
-    });
-  } else {
-    mongooseService.connect(
-      config,
-      (db: any) => {
-        // Initialize Models
-        mongooseService.loadModels(config);
+  // if (process.env.NODE_ENV === "test") {
+  // mongooseService.connectLoadAndSeed(config, (db: any) => {
+  //   const app = express.init(config);
+  //   if (callback) callback(app, db, config);
+  // });
+  // } else {
+  mongooseService.connect(config, (db: any) => {
+    // Initialize Models
+    mongooseService.loadModels(config);
 
-        // Initialize express
-        const app = express.init(config);
-        if (callback) callback(app, db, config);
-      }
-    );
-  }
+    // Initialize express
+    const app = express.init(config);
+    if (callback) callback(app, db, config);
+  });
+  // }
 }
 
 export function start(callback?: Function) {

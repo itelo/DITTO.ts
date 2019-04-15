@@ -20,6 +20,8 @@ const serverAssets = {
     "dist/modules/core/routes/**/*.js"
   ],
   sockets: "dist/modules/*/sockets/**/*.js",
+  typedefs: "dist/modules/*/typedefs/**/*.js",
+  resolvers: "dist/modules/*/resolvers/**/*.js",
   configs: ["dist/modules/*/config/*.js"],
   policies: "dist/modules/*/policies/**/*.js",
   validations: "dist/modules/*/validations/**/*.js",

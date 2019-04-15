@@ -17,15 +17,19 @@ import "passport";
  * Configure Graphql
  */
 function configureGraphql(app: Application, config: ConfigEnvsObject) {
+  console.log({ typedefFilePath: config.files.typedefs });
+  // console.log({ typedefFilePath: config.files.typedefs });
+
   const typeDefs = config.files.typedefs.map<DocumentNode>(
-    (typedefFilePath: string) => require(typedefFilePath).default
+    (typedefFilePath: string) =>
+      require(typedefFilePath.replace("src/", "@")).default
   );
 
   console.log({ typeDefs });
-  // console.log(typedefsFilesPromise);
 
   const resolversFiles = config.files.resolvers.map<string>(
-    (resolverFilePath: string) => require(resolverFilePath).default
+    (resolverFilePath: string) =>
+      require(resolverFilePath.replace("src/", "@")).default
   );
 
   // const typeDefs = Promise.all(typedefsFilesPromise);
@@ -63,7 +67,7 @@ function configureGraphql(app: Application, config: ConfigEnvsObject) {
       }
     },
     playground: {
-      endpoint: `http://localhost:3000/graphql`,
+      endpoint: `http://${config.host}:${config.port}/graphql`,
       settings: {
         "general.betaUpdates": false,
         "editor.cursorShape": "line",

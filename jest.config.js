@@ -5,6 +5,7 @@ module.exports = {
       tsConfig: "tsconfig.json"
     }
   },
+  // snapshotSerializers: [require("./pretty-format-toJSON")],
   collectCoverageFrom: [
     "src/models/**/*.ts"
     // "src/modules/**/*.ts"

@@ -31,7 +31,7 @@ export async function signup(req: Request, res: Response) {
 
     return responses.sendSuccessful(res, data, HttpStatus.OK);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     const {
       code,
       message,

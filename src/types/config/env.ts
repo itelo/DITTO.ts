@@ -60,7 +60,19 @@ export type Elasticsearch = {
   };
 };
 
+export type Mailer = {
+  from: string;
+  options: {
+    service: string;
+    auth: {
+      user: string;
+      pass: string;
+    };
+  };
+};
+
 export interface ConfigEnvsObject {
+  mailer: Mailer;
   elasticsearch: Elasticsearch;
   extension: string;
   outDir: string;

@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`route:/api/v1/signup fail: due to blank first name 1`] = `
+"{
+  \\"input\\": {
+    \\"body\\": {
+      \\"first_name\\": \\"\\",
+      \\"last_name\\": \\"minate\\",
+      \\"phone\\": \\"1234567891\\",
+      \\"email\\": \\"aaailuminate@india2.com\\",
+      \\"password\\": \\"!(_Um1n4t3\\"
+    }
+  },
+  \\"output\\": {
+    \\"body\\": {
+      \\"success\\": false,
+      \\"error\\": {
+        \\"message\\": \\"Phone alreadyExists\\",
+        \\"status\\": 422,
+        \\"code\\": \\"auth/unique-already-in-use\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`route:/api/v1/signup success: all data correct 1`] = `
+"{
+  \\"input\\": {
+    \\"body\\": {
+      \\"first_name\\": \\"ilu2\\",
+      \\"last_name\\": \\"minate2\\",
+      \\"phone\\": \\"1234567891\\",
+      \\"email\\": \\"iluminate@india2.com\\",
+      \\"password\\": \\"!(_Um1n4t3\\"
+    }
+  },
+  \\"output\\": {
+    \\"body\\": {
+      \\"success\\": true,
+      \\"data\\": {
+        \\"user\\": {
+          \\"profile_image_urls\\": {
+            \\"original\\": \\"/public/images/common/default.png\\",
+            \\"x256\\": \\"/public/images/common/default.png\\",
+            \\"x720\\": \\"/public/images/common/default.png\\"
+          },
+          \\"first_name\\": \\"ilu2\\",
+          \\"last_name\\": \\"minate2\\",
+          \\"email\\": \\"iluminate@india2.com\\",
+          \\"roles\\": [
+            \\"user\\"
+          ],
+          \\"_id\\": \\"5cb28df739a45ecc834c5cec\\",
+          \\"phone\\": \\"1234567891\\",
+          \\"created_at\\": \\"2019-04-14T01:33:43.769Z\\",
+          \\"albums\\": [],
+          \\"provider\\": \\"local\\",
+          \\"__v\\": 0
+        },
+        \\"token\\": \\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlsdW1pbmF0ZUBpbmRpYTIuY29tIiwicHJvZmlsZV9pbWFnZV91cmxzIjp7Im9yaWdpbmFsIjoiL3B1YmxpYy9pbWFnZXMvY29tbW9uL2RlZmF1bHQucG5nIiwieDI1NiI6Ii9wdWJsaWMvaW1hZ2VzL2NvbW1vbi9kZWZhdWx0LnBuZyIsIng3MjAiOiIvcHVibGljL2ltYWdlcy9jb21tb24vZGVmYXVsdC5wbmcifSwiX2lkIjoiNWNiMjhkZjczOWE0NWVjYzgzNGM1Y2VjIiwicm9sZXMiOlsidXNlciJdLCJpYXQiOjE1NTUyMDU2MjN9.xXno3fV5x5H4546kqyuyGO4S5bjATilSkVCxHGdYNSw\\"
+      }
+    }
+  }
+}"
+`;

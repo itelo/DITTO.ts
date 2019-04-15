@@ -1,7 +1,6 @@
 import { Application } from "express";
 
 import * as authenticationLocal from "@modules/users/controllers/v1/authentication/users.authentication.local.controller";
-import * as authenticationOauth from "@modules/users/controllers/v1/authentication/users.authentication.oauth.controller";
 import * as profile from "@modules/users/controllers/v1/profile/users.profile.password.controller";
 import * as middleware from "@modules/users/controllers/v1/users.middleware.controller";
 
@@ -12,18 +11,14 @@ export default (app: Application) => {
 
   app.route("/api/v1/users/password").post(profile.changePassword);
 
-  // Setting up the users authentication api
-  app.route("/api/v1/signup").post(authenticationLocal.signup);
-  app.route("/api/v1/signin").post(authenticationLocal.signin);
-
-  // Setting the oauth routes
-  app.route("/api/v1/auth/:strategy").get(authenticationOauth.oauthCall);
-  app
-    .route("/api/v1/auth/:strategy/callback")
-    .get(authenticationOauth.oauthCallback);
-
   app.route("/api/v1/users/:userId");
 
   // Finish by binding the article middleware
   app.param("userId", middleware.userByID);
+
+  // Setting up the users profile api
+  // app.route('/api/v1/users').put(users.update);
+  // app.route('/api/v1/users/accounts').delete(users.removeOAuthProvider);
+
+  // app.route('/api/v1/users/picture').post(users.changeProfilePicture);
 };

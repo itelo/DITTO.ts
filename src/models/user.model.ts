@@ -12,8 +12,8 @@ const config = configStack.config;
 const Schema = mongoose.Schema;
 
 export type UserModelMethods = mongoose.Document & {
-  reset_password_token: string;
-  reset_password_expires: Date;
+  reset_password_token?: string;
+  reset_password_expires?: number;
   hashPassword: Function;
   authenticate: Function;
   seed: Function;

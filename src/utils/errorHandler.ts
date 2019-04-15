@@ -59,7 +59,7 @@ export function getErrorMessageCodeAndHttpStatus(err: ErrorHandler) {
   let code = Codes.UNKNOWN_ERROR;
   let status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-  console.log(err.errors);
+  // console.log(err.errors);
 
   let message = "Something went wrong";
   if (err.code) {
@@ -95,8 +95,8 @@ export function getErrorMessageCodeAndHttpStatus(err: ErrorHandler) {
       // if (err.errors[errName]) {
 
       // }
-      console.log(errName);
-      console.log(err.errors[errName].message);
+      // console.log(errName);
+      // console.log(err.errors[errName].message);
       if (
         // @ts-ignore
         err.errors[errName].name === "ValidatorError" &&

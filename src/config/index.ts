@@ -17,7 +17,7 @@ const EXTENSION_DEBUG = isEnvProduction ? "js" : "ts",
 /**
  * Get files by glob patterns
  */
-const getGlobbedPaths = (
+export const getGlobbedPaths = (
   globPatterns: [string] | string,
   excludes?: [string] | string
 ) => {

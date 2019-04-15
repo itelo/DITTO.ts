@@ -1,7 +1,7 @@
 import { ConfigEnvsObject } from "types/config/env";
 import express, { Application, Request, Response, NextFunction } from "express";
 import morgan from "morgan";
-
+import cons from "consolidate";
 import bodyParser from "body-parser";
 // import mongoose from "mongoose";
 // import MongoStore from "connect-mongo";
@@ -185,6 +185,18 @@ function initModulesServerRoutes(app: Application, config: ConfigEnvsObject) {
 }
 
 /**
+ * Configure view engine
+ */
+function initViewEngine(app: Application) {
+  // assign the swig engine to .html files
+  app.engine("html", cons.swig);
+
+  // set .html as the default extension
+  app.set("view engine", "html");
+  app.set("views", path.resolve("./"));
+}
+
+/**
  * Configure the static routes
  */
 function initStaticRoutes(app: Application) {
@@ -277,6 +289,9 @@ export function init(config: ConfigEnvsObject) {
 
   // Initialize modules server routes
   initModulesServerRoutes(app, config);
+
+  // Initialize View Engine
+  initViewEngine(app);
 
   initStaticRoutes(app);
 
