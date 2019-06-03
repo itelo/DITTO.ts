@@ -8,8 +8,21 @@ const typeDef = gql`
     last_name: String
     display_name: String
   }
+  type ResponseSuccessful {
+    token: String
+    user: User
+  }
+  type ResponseError {
+    code: String
+    message: String
+    status: Int
+  }
   type Subscription {
     getterUser: User
+  }
+  # union Response = ResponseSuccessful
+  type Mutation {
+    signin(email: String, password: String): ResponseSuccessful
   }
   type Query {
     getUsers: [User]

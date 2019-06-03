@@ -1,14 +1,41 @@
+import path from "path";
+import util from "util";
 import sharp from "sharp";
 import Firebase from "@config/libs/firebase";
+import AWS from "@config/libs/aws";
 import configStack from "@config/index";
 import fs from "fs";
 import express from "express";
 import multer from "multer";
+import { ManagedUpload } from "aws-sdk/clients/s3";
+
+export function uploadToS3(storageRef: string, file: Express.Multer.File) {
+  const config = configStack.config;
+  const destination = `${configStack.config.aws.s3.baseRef}/${storageRef}/${
+    file.filename
+  }`;
+
+  const params = {
+    Bucket: config.aws.s3.bucket,
+    Key: destination,
+    Body: fs.createReadStream(file.path),
+    acl: "public-read"
+  };
+  const s3 = AWS.s3();
+
+  return new Promise((resolve, reject) => {
+    s3.upload(params, (err: Error, data: ManagedUpload.SendData) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+}
 
 export function uploadToFirebaseStorage(
   storageRef: string,
-  file: Express.Multer.File,
-  sizes?: Array<number>
+  file: Express.Multer.File
 ) {
   const config = configStack.config;
 
@@ -48,6 +75,31 @@ export function uploadToFirebaseStorage(
  */
 export function deleteLocalImage(filePath: string) {
   fs.unlinkSync(filePath);
+}
+
+export function generateSignedUrlFromAmazon(
+  storageRef: string,
+  filename: string,
+  _options = {}
+): Promise<string> {
+  const config = configStack.config;
+  const s3 = AWS.s3();
+  const destination = `${
+    configStack.config.aws.s3.baseRef
+  }/${storageRef}/${filename}`;
+  const params = {
+    Bucket: config.aws.s3.bucket,
+    Key: destination,
+    Expires: 99404640
+  };
+  return new Promise((resolve, reject) =>
+    s3.getSignedUrl("getObject", params, (err, url) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(url);
+    })
+  );
 }
 
 /**
@@ -176,6 +228,44 @@ export function resizeUploadToFirebaseAndGetURL(
       // get the url for resized image in google cloud storage
       return generateSignedUrl(url, _file.filename);
     });
+}
+
+/**
+ *
+ * A wrapper function that contains:
+ * { uploadToFirebaseStorage, deleteLocalImage, generateSignedUrl }
+ *
+ * @param {Express.Multer.File} file the original Multer File object to be resized
+ * @param {string} path
+ * @param {string} url the url used to put the image in correct path
+ * @returns {Promise<string>} A promise that resolve to the url of the resized image
+ */
+export function uploadToFirebaseAndGetURL(
+  storageRef: string,
+  file: Express.Multer.File
+): Promise<string> {
+  return uploadToFirebaseStorage(storageRef, file).then(() =>
+    generateSignedUrl(storageRef, file.filename)
+  );
+}
+
+/**
+ *
+ * A wrapper function that contains:
+ * { uploadToFirebaseStorage, deleteLocalImage, generateSignedUrl }
+ *
+ * @param {Express.Multer.File} file the original Multer File object to be resized
+ * @param {string} path
+ * @param {string} url the url used to put the image in correct path
+ * @returns {Promise<string>} A promise that resolve to the url of the resized image
+ */
+export function uploadToS3AndGetSignedURL(
+  storageRef: string,
+  file: Express.Multer.File
+): Promise<string> {
+  return uploadToS3(storageRef, file).then(() =>
+    generateSignedUrlFromAmazon(storageRef, file.filename)
+  );
 }
 
 export interface ResizedResult {

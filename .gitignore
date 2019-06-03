@@ -40,7 +40,7 @@ Thumbs.db
 dist/**/*
 docs
 
-bitx-cloud-firebase-adminsdk.json
+firebase-admin-sdk.json
 
 yarn.lock
 package-lock.json

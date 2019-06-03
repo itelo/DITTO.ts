@@ -44,6 +44,7 @@ function configureGraphql(app: Application, config: ConfigEnvsObject) {
     typeDefs,
     resolvers,
     context: ({ req }) => {
+      // console.log(req);
       if (req) {
         // add the user to the context
         return { req, user: req.user };
@@ -66,8 +67,9 @@ function configureGraphql(app: Application, config: ConfigEnvsObject) {
         // throw new Error('Missing auth token!');
       }
     },
+    // http://${config.host}:${config.port}
     playground: {
-      endpoint: `http://${config.host}:${config.port}/graphql`,
+      endpoint: `/graphiql`,
       settings: {
         "general.betaUpdates": false,
         "editor.cursorShape": "line",
@@ -83,7 +85,7 @@ function configureGraphql(app: Application, config: ConfigEnvsObject) {
     }
   });
 
-  server.applyMiddleware({ app, path: "/graphql" });
+  server.applyMiddleware({ app, path: "/graphiql" });
 
   const httpServer = createServer(app);
 

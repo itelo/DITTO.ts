@@ -4,7 +4,7 @@ const serverEnv = {
   outDir: "src",
   extension: "ts",
   app: {
-    title: "BITX.TS",
+    title: "DITTO.TS",
     description: "RESTFUL API FOR 'BACKEND'",
     keywords: "mongodb, express, node.js, mongoose, passport, typescript",
     googleAnalyticsTrackingID:
@@ -31,7 +31,6 @@ const serverEnv = {
   },
   firebase: {
     app: {
-      // databaseURL: "https://bitx-cloud.firebaseio.com"/*,
       credential: process.env.FIREBASE_ADMIN_JSON
         ? firebaseAdmin.credential.cert(
             JSON.parse(process.env.FIREBASE_ADMIN_JSON)
@@ -42,6 +41,27 @@ const serverEnv = {
     },
     storage: {
       bucketName: "gallerist-b72a4.appspot.com"
+    }
+  },
+  aws: {
+    s3: {
+      accessKeyId: process.env.S3_ACCESS_KEY_ID || "AKIAZIZYQBSNABYC2F53",
+      secretAccessKey:
+        process.env.S3_SECRET_ACCESS_KEY ||
+        "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",
+      bucket: process.env.S3_BUCKET || "test-ditto"
+    }
+  },
+  uploads: {
+    // Storage can be 'local' | 's3' | 'firebase'
+    storage: process.env.UPLOADS_STORAGE || "local",
+    profile: {
+      image: {
+        // dest: "./modules/users/client/img/profile/uploads/",
+        limits: {
+          fileSize: 1 * 1024 * 1024 // Max file size in bytes (1 MB)
+        }
+      }
     }
   },
   gMaps: {

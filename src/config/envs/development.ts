@@ -8,7 +8,7 @@ export default {
       process.env.MONGODB_URI ||
       "mongodb://" +
         (process.env.DB_1_PORT_27017_TCP_ADDR || "localhost") +
-        "/bitx-dev",
+        "/ditto-dev",
     options: {},
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
@@ -26,6 +26,11 @@ export default {
       maxsize: 10485760,
       maxFiles: 2,
       json: false
+    }
+  },
+  aws: {
+    s3: {
+      baseRef: "dev"
     }
   },
   firebase: {

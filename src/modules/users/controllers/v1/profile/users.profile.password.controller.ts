@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import path from "path";
 import configStack from "@config/index";
-// const errorHandler = require(path.resolve(
-//   "./modules/core/server/controllers/errors.server.controller"
-//   ));
 import User, { UserModel } from "@models/user.model";
 import nodemailer from "nodemailer";
 import async from "async";

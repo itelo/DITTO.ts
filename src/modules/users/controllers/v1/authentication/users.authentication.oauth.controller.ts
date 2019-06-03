@@ -203,3 +203,31 @@ const addProviderToAnExistingUSer = async (
     done(err, user, info);
   }
 };
+
+/**
+ * Remove OAuth provider
+ */
+export async function removeOAuthProvider(req: Request, res: Response) {
+  const user = req.user;
+  const provider = req.body.provider;
+
+  // Delete the additional provider
+  if (user.additionalProvidersData[provider]) {
+    delete user.additionalProvidersData[provider];
+
+    // Then tell mongoose that we've updated the additionalProvidersData field
+    user.markModified("additionalProvidersData");
+  }
+
+  try {
+    await user.save();
+    return responses.sendSuccessful(res, user);
+  } catch (err) {
+    const {
+      code,
+      message,
+      status
+    } = errorHandler.getErrorMessageCodeAndHttpStatus(err);
+    return responses.sendError(res, code, message, status);
+  }
+}

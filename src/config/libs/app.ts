@@ -47,7 +47,7 @@ export function start(callback?: Function) {
       console.log(chalk.green(`App version:     ${config.pkg.version}`));
       if (config.pkg["pkg-version"])
         console.log(
-          chalk.green(`BITX.JS version: ${config.pkg["pkg-version"]}`)
+          chalk.green(`DITTO.JS version: ${config.pkg["pkg-version"]}`)
         );
       console.log("--");
 

@@ -71,7 +71,17 @@ export type Mailer = {
   };
 };
 
+type Aws = {
+  s3: {
+    accessKeyId: string;
+    secretAccessKey: string;
+    bucket: string;
+    baseRef: string;
+  };
+};
+
 export interface ConfigEnvsObject {
+  aws: Aws;
   mailer: Mailer;
   elasticsearch: Elasticsearch;
   extension: string;

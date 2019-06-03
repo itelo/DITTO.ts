@@ -6,7 +6,7 @@ export default {
       process.env.MONGOHQ_URL ||
       process.env.MONGODB_URI ||
       `mongodb://${process.env.DB_1_PORT_27017_TCP_ADDR ||
-        "localhost"}/bitx-test`,
+        "localhost"}/ditto-test`,
     options: {},
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false,
